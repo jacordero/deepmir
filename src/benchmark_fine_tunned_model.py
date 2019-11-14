@@ -6,15 +6,14 @@ from keras.models import load_model
 
 import numpy as np
 
-import deepmirna_utils
-
+import utlis.deepmirna_utils as deep_utils
 
 MODEL_FILENAME = "../models/fine_tunned_cnn.h5"
 DATA_DIR = "../datasets/"
 
 def evaluate(images_filename, labels_filename, names_filename):
-    images = deepmirna_utils.load_image_data(images_filename)
-    labels = deepmirna_utils.load_labels(labels_filename, 2)
+    images = deep_utils.load_image_data(images_filename)
+    labels = deep_utils.load_labels(labels_filename, 2)
     names = np.load(names_filename)['arr_0']
 
     model = load_model(MODEL_FILENAME)

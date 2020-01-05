@@ -29,9 +29,13 @@ def generate_hairpin_images(fasta_filename, data_directory):
 
     # generate new hairpin images
     sequences = Fasta(fasta_filename)
+    seq_fold_dict = {}
     for key in sequences.keys():
-        generate_hairpin_image(str(sequences[key][:].seq), key, images_directory)
+        sequence = str(sequences[key][:].seq)
+        fold = generate_hairpin_image(sequence, key, images_directory)
+        seq_fold_dict[key] = (sequence, fold)
 
+    return seq_fold_dict
 
 def generate_hairpin_image(sequence, sequence_identifier, output_directory):
 
@@ -40,20 +44,24 @@ def generate_hairpin_image(sequence, sequence_identifier, output_directory):
     	hairpin_image_name, '-s', sequence], stdout=PIPE, stderr=PIPE)
     stdout, stderr = process.communicate()
 
-    #print(stdout)
-    # hairpin image was generated with success
-    if stderr.decode('utf-8') != '':
-        print(stderr.decode('utf-8'))
-
-    # TODO: handle non success
+    if not stderr.decode('utf-8'): # hairpin image was generated
+        stdout = stdout.decode('utf-8')
+        fold_info = stdout.split('\n')[1]
+        fold = fold_info.split(':')[1].strip()
+    else: # hairpin image was not generated
+        msg = "Cannot generate a hairpin image for {}.\nError message: {}"
+        raise Exception(msg.format(sequence, stderr.decode('utf-8'))) 
         
+    return fold
 
+                        
 def generate_hairpin_array(data_directory):
     
     images_directory = data_directory + "/images"
     # select images that will be converted to numpy arrays
     image_short_filenames = []
     image_long_filenames = []
+    
     for (dirpath, dirnames, filenames) in os.walk(images_directory):
         for filename in filenames:
             if filename.endswith(".png"):
@@ -100,7 +108,7 @@ def load_image_data(filename):
      return X
 
 
-def compute_predictions(data_directory):
+def compute_predictions(data_directory, seq_fold_pairs):
     images = load_image_data(data_directory + "/images.npz")
     names = np.load(data_directory + "/names.npz")['arr_0']
     
@@ -108,26 +116,39 @@ def compute_predictions(data_directory):
     predictions = np.argmax(model.predict(images), axis=1)
     
     results_filename = data_directory + "/results.csv"
-    print("Writing prediction results to: {}".format(results_filename))
     with open(results_filename, 'w') as results:
-        results.write("hairpin,label\n")
+        results.write("hairpin,sequence,fold,label\n")
         
         for name, prediction in zip(names.tolist(), predictions.tolist()):
+            name = name.decode('utf-8')
             if prediction == 1:
                 label = "pre-miRNA"
             else:
                 label = "not pre-miRNA"
-                
-            results.write("{},{}\n".format(name.decode('utf-8'), label))
+
+            seq_fold = seq_fold_dict[name]            
+            results.write("{},{},{},{}\n".format(name,
+                                                 seq_fold[0],
+                                                 seq_fold[1],
+                                                 label))
+
+    print("Prediction results were written to: {}".format(results_filename))
 
           
 if __name__ == "__main__":
-    test_filename = "sequences.fasta"
-    data_directory = CURRENT_DIR + '/data/'
-    data_directory += os.path.basename(test_filename).rstrip('.fasta')
-    
-    generate_hairpin_images(test_filename, data_directory)
-    generate_hairpin_array(data_directory)
-    compute_predictions(data_directory)
 
-    print("Predictions for sequences in {} are finished.".format(data_directory))
+    if len(sys.argv) != 2:
+        instructions = "Usage: python predictor.py [input_filename]\n"
+        instructions +="\tThe input_filename is the name of the fasta file containing RNA sequences.\n"
+        instructions += "\tThe examples directory contains some fasta files that this program can process.\n"
+        print("\nError: Please provide the name of the file containing the RNA sequences to process.")
+        print(instructions)
+        exit(0)
+
+    input_filename = sys.argv[1]
+    base_input_filename = os.path.basename(input_filename)
+    data_directory = CURRENT_DIR + '/data/' + base_input_filename.split('.')[0]
+    
+    seq_fold_dict  = generate_hairpin_images(input_filename, data_directory)
+    generate_hairpin_array(data_directory)
+    compute_predictions(data_directory, seq_fold_dict)

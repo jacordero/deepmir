@@ -6,9 +6,9 @@ from keras.models import load_model
 
 import numpy as np
 
-import utlis.deepmirna_utils as deep_utils
+import utils.deepmirna_utils as deep_utils
 
-MODEL_FILENAME = "../models/fine_tunned_cnn.h5"
+MODEL_FILENAME = "../models/fine_tuned_cnn.h5"
 DATA_DIR = "../datasets/"
 
 def evaluate(images_filename, labels_filename, names_filename):

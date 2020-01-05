@@ -147,7 +147,7 @@ if __name__ == "__main__":
 
     input_filename = sys.argv[1]
     base_input_filename = os.path.basename(input_filename)
-    data_directory = CURRENT_DIR + '/data/' + base_input_filename.split('.')[0]
+    data_directory = CURRENT_DIR + '/user_data/' + base_input_filename.split('.')[0]
     
     seq_fold_dict  = generate_hairpin_images(input_filename, data_directory)
     generate_hairpin_array(data_directory)

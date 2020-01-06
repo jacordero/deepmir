@@ -3,7 +3,7 @@ Detection of pre-microRNA with Convolutional Neural Networks
 
 This repository includes the source code used to train the CNN models described in https://www.biorxiv.org/content/10.1101/840579v1.
 
-Requirements:
+Dependencies:
 * python3.5+
 * pyfaidx-0.5.7
 * imageio-2.5.0 

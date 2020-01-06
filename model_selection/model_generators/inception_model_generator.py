@@ -13,8 +13,6 @@ import utils.deepmirna_utils as deep_utils
 
 NUM_CLASSES = 2
 IMG_ROWS, IMG_COLUMNS = 25, 100
-# try with values: 8, 12, 16*, 20
-N_FILTERS = 8 #
 
 
 def inception_module(inputs, n_filters):
@@ -34,12 +32,12 @@ def inception_module(inputs, n_filters):
     return x
 
 
-def build_model_one_module():
+def build_model_one_module(n_filters):
     input_shape_img = deep_utils.get_rgb_input_shape(IMG_ROWS, IMG_COLUMNS)
     inputs = Input(input_shape_img)
 
     x = Conv2D(64, (3,3), activation='relu', padding='same')(inputs)
-    x = inception_module(x, n_filters=N_FILTERS)
+    x = inception_module(x, n_filters=n_filters)
 
     x  = Flatten()(x)
     x = Dropout(0.5)(x)
@@ -50,19 +48,19 @@ def build_model_one_module():
                   optimizer=keras.optimizers.Adam(),
                   metrics=['accuracy'])
 
-    model_name = "inception_one_module_" + str(N_FILTERS) + "filters"
+    model_name = "inception_one_module_" + str(n_filters) + "filters"
 
     return (model, model_name)
 
 
 
-def build_model_two_modules():
+def build_model_two_modules(n_filters):
     input_shape_img = deep_utils.get_rgb_input_shape(IMG_ROWS, IMG_COLUMNS)
     inputs = Input(input_shape_img)
 
     x = Conv2D(64, (3,3), activation='relu', padding='same')(inputs)
-    x = inception_module(x, n_filters=N_FILTERS)
-    x = inception_module(x, n_filters=N_FILTERS)
+    x = inception_module(x, n_filters=n_filters)
+    x = inception_module(x, n_filters=n_filters)
 
     x  = Flatten()(x)
     x = Dropout(0.5)(x)
@@ -73,7 +71,7 @@ def build_model_two_modules():
                   optimizer=keras.optimizers.Adam(),
                   metrics=['accuracy'])
 
-    model_name = "inception_two_modules_" + str(N_FILTERS) + "filters"
+    model_name = "inception_two_modules_" + str(n_filters) + "filters"
 
     return (model, model_name)
 
@@ -84,9 +82,9 @@ def build_model_three_modules():
     inputs = Input(input_shape_img)
 
     x = Conv2D(64, (3,3), activation='relu', padding='same')(inputs)
-    x = inception_module(x, n_filters=N_FILTERS)
-    x = inception_module(x, n_filters=N_FILTERS)
-    x = inception_module(x, n_filters=N_FILTERS)
+    x = inception_module(x, n_filters=n_filters)
+    x = inception_module(x, n_filters=n_filters)
+    x = inception_module(x, n_filters=n_filters)
 
     x  = Flatten()(x)
     x = Dropout(0.5)(x)
@@ -97,7 +95,7 @@ def build_model_three_modules():
                   optimizer=keras.optimizers.Adam(),
                   metrics=['accuracy'])
 
-    model_name = "inception_three_modules_" + str(N_FILTERS) + "filters"
+    model_name = "inception_three_modules_" + str(n_filters) + "filters"
     
     return (model, model_name)
 
@@ -107,10 +105,10 @@ def build_model_four_modules():
     inputs = Input(input_shape_img)
 
     x = Conv2D(64, (3,3), activation='relu', padding='same')(inputs)
-    x = inception_module(x, n_filters=N_FILTERS)
-    x = inception_module(x, n_filters=N_FILTERS)
-    x = inception_module(x, n_filters=N_FILTERS)
-    x = inception_module(x, n_filters=N_FILTERS)
+    x = inception_module(x, n_filters=n_filters)
+    x = inception_module(x, n_filters=n_filters)
+    x = inception_module(x, n_filters=n_filters)
+    x = inception_module(x, n_filters=n_filters)
 
     x  = Flatten()(x)
     x = Dropout(0.5)(x)
@@ -121,5 +119,5 @@ def build_model_four_modules():
                   optimizer=keras.optimizers.Adam(),
                   metrics=['accuracy'])
 
-    model_name = "inception_four_modules_" + str(N_FILTERS) + "filters"
+    model_name = "inception_four_modules_" + str(n_filters) + "filters"
     return (model, model_name)

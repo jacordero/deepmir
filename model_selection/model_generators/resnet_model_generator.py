@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """ 
-Generator of ResNet-like models. This script based in the code written by the keras team:
+Script that generates ResNet-like models. This script based in the code written by the keras team:
 https://github.com/keras-team/keras-applications/blob/master/keras_applications/resnet50.py
 """
 

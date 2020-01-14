@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+"""
+Script that generates Inception like models. This script is based in the code written by the 
+developers of tensorflow: https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/keras/applications/inception_v3.py
+"""
+
+
 from __future__ import print_function
 
 import keras

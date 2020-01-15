@@ -17,7 +17,8 @@ The content of this project is organized as follows:
 This project requires:
 * python 3.5 or later
 * pyfaidx 0.5.7
-* imageio 2.5.0 
+* imageio 2.5.0
+* xldr
 * Keras 2.2.4 
 * tensorflow 1.14.0
 * ipython 7.9.0

@@ -18,7 +18,7 @@ def create_directory(directory):
         print ('Error: Creating directory {}'.format(directory))
         sys.exit(1)
 
-def load_ids(filename):
+def load_names(filename):
      return np.load(filename)['arr_0']
 
 

@@ -25,7 +25,7 @@ def train(model, model_name):
               validation_data=(test_data, test_labels),
               batch_size=BATCH_SIZE, epochs=TRAIN_EPOCHS)
     
-    utils.create_directory("../models")
+    deep_utils.create_directory("../models")
     model_filename = "../models/base_" + model_name + ".h5" 
     model.save(model_filename)
 

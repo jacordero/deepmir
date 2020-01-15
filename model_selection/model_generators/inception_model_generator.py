@@ -83,7 +83,7 @@ def build_model_two_modules(n_filters):
 
 
 
-def build_model_three_modules():
+def build_model_three_modules(n_filters):
     input_shape_img = deep_utils.get_rgb_input_shape(IMG_ROWS, IMG_COLUMNS)
     inputs = Input(input_shape_img)
 
@@ -106,7 +106,7 @@ def build_model_three_modules():
     return (model, model_name)
 
 
-def build_model_four_modules():
+def build_model_four_modules(n_filters):
     input_shape_img = deep_utils.get_rgb_input_shape(IMG_ROWS, IMG_COLUMNS)
     inputs = Input(input_shape_img)
 
